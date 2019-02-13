@@ -1,52 +1,30 @@
-# Aggregate multiple connections with LACP service
+# lacp-service
 
-In this lab, you will learn about LACP service. It is an example Python application that is using Frinx uniconfig framework to provision simple LACP service. Purpose of the application is to show potentional users of uniconfig how to use it in an efficient and simple manner.
-
-## Objective
-
-* Understand how LACP service can be used to agregate multiple network connections
-* Learn how to use LACP service to agregate several parallel connections into 1 logical connection
-
-### Completion Time: XZY minutes
+lacp-service is an example python application using [Frinx uniconfig framework](https://frinx.io/blog/uniconfig-framework)
+to provision simple [LACP service](https://en.wikipedia.org/wiki/Link_aggregation). Purpose of the application is to
+show potentional users of uniconfig how to use it in an efficient and simple manner.
 
 ## Prerequisites
 
-* Install and run the FRINX ODL distribution
-* Install and run Postman
-* Mount 2 routers via Postman environment
+To be able to run and play wit the application, you need to have [Frinx ODL distribution](https://frinxio.github.io/Frinx-docs/FRINX_ODL_Distribution/carbon.html) 
+up and running. Devices you want to configure have to be accesible by uniconfig.            
 
-For further guidance click on Installation and configuration guide located on top of the page.
-
-## Step 1: Install and configure LACP service application
-
-LACP service application runs on python 3.6 or newer. Go into the application folder directory and execute following command:
+`lacp_service.py` requires python 3.6 and flask installed in your environment. You need to also install swagger_uniconfig package. You can do it with following command:
 
 ```
-pip install flask frinx_uniconfig-3.1.7.rc16_frinx_SNAPSHOT-py3-none-any.whl
+pip install frinx_uniconfig-3.1.7.rc16_frinx_SNAPSHOT-py3-none-any.whl
 ```
 
-After that change ODL adderss configuration in lacp_service.py. Adjust following lines according to you local setting:
+## Provisioning the service
 
-```
-configuration.username = 'admin'
-configuration.password = 'admin'
-configuration.host = 'http://127.0.0.1:8181/restconf'
-```
-
-Now you are ready to start the LACP service application
+Now you should be able to provision the LACP service. You can start the application
 
 ```
 export FLASK_APP=lacp_service.py
 flask run
 ```
 
-
-## Step 2: Provision the LACP service
-
-Now you have application up and running.
-
-Application lacp_service.py exposes really simple and straightforward REST API.  
-To provision new LACP service, issue simple POST request:
+lacp_service.py exposes really simple and straightforward REST API. To provision new LACP service, issue simple POST request
 
 ```
 POST http://127.0.0.1:5000/service/new-service
@@ -70,9 +48,4 @@ POST http://127.0.0.1:5000/service/new-service
 }
 ```
 
-The configuration speaks for itself. This bundles GigabitEthernet0/0/0/1 and GigabitEthernet0/0/0/3 interfaces into new bundle with id 122 on node1 and similiarly on other node. 
-
-
-lacp_service.py internally translates this POST request into openconfig uniconfig based configuration issues several calls to UNICONFIG API and as a result provision the service.
-
-
+lacp_service.py basically translates this POSt request into openconfig uniconfig based configuration and provision the service.
